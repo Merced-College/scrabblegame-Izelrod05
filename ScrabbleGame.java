@@ -8,34 +8,34 @@ Izel Rodriguez Diaz
  and when quit is ented it prints out guessed words and gives total score 
  
 */
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
-public Class ScrabbleGame {
+public class ScrabbleGame {
     //private varibles
     private static ArrayList<Word> wordList = new ArrayList<>();
-    private static ArrayList<Word> guessedList = new ArrayList<>();
-    private static int getScore =0;
-    private static final Random andy = new Random();
+    private static List<String> guessedList = new ArrayList<>();
+    private static int totalScore =0;
+    private static final Random rand = new Random();
     private static final Scanner scnr = new Scanner(System.in);
 
     
-    public static void mani(string[] args ){
+    public static void main(String[] args ){
         loadWordsFromFile("CollinsScrabbleWords_2019.txt");//loads txt file in order to late on compare answers
         Collections.sort(wordList);
 
          while(true){
-          List<character> randomLetters  = generateRandomLetters(4);
+          List<Character> randomLetters  = generateRandomLetters(4);
           System.out.println("Your Letters are: " + randomLetters);
 
          System.out.println("Enter a word using the given letters (or 'exit' to quit): ");
-         Scanner userInput = scnr.nextLine().toLowerCase;
+         String userInput = scnr.nextLine().toLowerCase();
 
         //exit fn after user inputs exit
          if(userInput.equals("exit")){
-            system.out.printl("Thanks for playing!")
+            System.out.println("Thanks for playing!");
              System.out.println("You guessed the following valid words:");
-                for (String word : guessedWords) {
+                for (String word : guessedList) {
                     System.out.println(" - " + word);
                 }
                 System.out.println("Final Score: " + totalScore + " points");
@@ -43,26 +43,25 @@ public Class ScrabbleGame {
           }
             
             if(isValidWord(userInput,randomLetters)){
-               word userWord = new Word(userInput);
-               int index = Collections.binarySearch(wordsList, userWord);
+               Word userWord = new Word(userInput);
+               int index = Collections.binarySearch(wordList, userWord);
 
                 if(index >= 0){
-                    if(!guessedWords.contains(userInput)){
-                        guessedWords.add(userInput);//stores each unique guess wether points are given or not
+                    if(!guessedList.contains(userInput)){
+                        guessedList.add(userInput);//stores each unique guess wether points are given or not
                         int earnedPoints = calculateScore(userInput);
                         totalScore += earnedPoints;
-                        System.outprintln("valid word +" + earnedpoints + " points.");
+                        System.out.println("valid word +" + earnedPoints + " points.");
                     }else{
 
                         System.out.println("You already guessed that word");
                     }
                     //show stats 
-                    System.out.println("Words guessed: " + guessedWords);
+                    System.out.println("Words guessed: " + guessedList);
                     System.out.println("Total Score: " + totalScore + " points");
-                }else{
-                    System.out.println("Not a valid scribble word");
-                }else{
-                    System.out.println("Word uses invalid letters");
+                }
+                else{
+                    System.out.println("Not a valid scribble word or Word uses invalid letters");
                 }
 
             }
@@ -75,7 +74,7 @@ public Class ScrabbleGame {
             while (fileScanner.hasNextLine()) {
                 String wordStr = fileScanner.nextLine().trim();
                 if (!wordStr.isEmpty()) {
-                    wordsList.add(new Word(wordStr));
+                    wordList.add(new Word(wordStr));
                 }
             }
         } catch (FileNotFoundException e) {
@@ -85,8 +84,8 @@ public Class ScrabbleGame {
     }
 
     //Random letter gen
-    public static list <Character> generateRandomLetters(int numLetters){
-        list<Character> letters = new ArrayList<>();
+    public static List<Character> generateRandomLetters(int numLetters){
+        List<Character> letters = new ArrayList<>();
          for (int i = 0; i < numLetters; i++) {
             char letter = (char) ('a' + rand.nextInt(26));
             letters.add(letter);
@@ -94,7 +93,7 @@ public Class ScrabbleGame {
     return letters;
     }
 
-    check word with given letters
+   // check word with given letters
     public static boolean isValidWord(String word, List<Character> availableLetters){
         List<Character> tempLetters = new ArrayList<>(availableLetters);
         for(char c : word.toCharArray()){
@@ -105,7 +104,7 @@ public Class ScrabbleGame {
         return true;
     }
 
-    public static calculateScore(String word){
+    public static int calculateScore(String word){
 
         int len = word.length();
         if(len == 3) return 2;
